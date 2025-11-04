@@ -1,0 +1,34 @@
+# CodeIgniter specific
+application/cache/*
+!application/cache/index.html
+application/logs/*
+!application/logs/index.html
+
+# IDE specific files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment specific
+application/config/development/
+application/config/testing/
+application/config/production/
+
+# Composer dependencies
+vendor/
+
+# User uploaded content
+upload/*
+!upload/index.html
+
+# System files
+.env
+*.log
+*.sql
+*.sqlite
+.htaccess
+
+# But keep these files
+!disdukca_master.sql

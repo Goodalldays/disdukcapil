@@ -58,7 +58,7 @@ background: radial-gradient(circle, rgba(133,154,214,1) 0%, rgba(78,115,223,1) 1
                                 <div class="p-5">
                                     <div class="">
                                         <h1 class="h3 text-gray-900 mb-4">Selamat datang,</h1>
-                                        <h1 class="h6 text-gray-900 mb-4">silahkan isi <strong>username</strong>, <strong>password</strong> dan <strong>kode keamanan</strong> pada form dibawah untuk dapat masuk ke dalam halaman administrator.</>
+                                        <h1 class="h6 text-gray-900 mb-4">silahkan isi <strong>username</strong> dan <strong>password</strong> pada form dibawah untuk dapat masuk ke dalam halaman administrator.</>
                                     </div>
                                     <?php
             echo $this->session->flashdata('message');
@@ -82,14 +82,7 @@ background: radial-gradient(circle, rgba(133,154,214,1) 0%, rgba(78,115,223,1) 1
 </div>
 
 
-                                        <div class="form-group has-feedback">
-            <?php echo $image; ?>
-          </div>
-          <div class="form-group">
-                                            <input type="text" autocomplete="off" name="security-code" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Masukkan kode keamanan diatas">
-                                        </div>
+                                                                                <!-- captcha disabled: no security-code required -->
 <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">

@@ -5,9 +5,8 @@ class Administrator extends CI_Controller
 {
     function index(){
         if (isset($_POST['submit'])){
-            // allow bypassing captcha on localhost for development (keeps behavior safe for production)
-            $is_localhost = (isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || $_SERVER['HTTP_HOST'] === '127.0.0.1'));
-            if ($this->input->post() && ($is_localhost || strtolower($this->input->post('security-code')) == strtolower($this->session->userdata('mycaptcha')))){
+            // captcha disabled: accept form submission with username+password only
+            if ($this->input->post()){
                 $username = $this->input->post('username');
                 $password = $this->input->post('password');
 
@@ -37,93 +36,27 @@ class Administrator extends CI_Controller
                     );
 					redirect('administrator/home');
 					} else {
-						$this->load->helper('captcha');
-                        $vals = array(
-                            'img_path'	 => './captcha/',
-                            'img_url'	 => base_url().'captcha/',
-                            'font_path' => FCPATH.'assets/template/admin/Tahoma.ttf',
-                            'font_size'     => 50,
-					        'img_width'	 => 340,
-					        'img_height' => 50,
-					        'border' => 0,
-					        'word_length'   => 6,
-					        'expiration' => 7200,
-                            'colors'        => array(
-                            'background' => array(255, 255, 255),
-                            'border' => array(255, 255, 255),
-                            'text' => array(0, 0, 0),
-                            'grid' => array(140, 166, 245)
-                        )
-				    );
-
-                    $cap = create_captcha($vals);
-				    $data['image'] = $cap['image'];
-				    $this->session->set_userdata('mycaptcha', $cap['word']);
-
-                    echo $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Username atau Password Salah!!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-
-                    $data['title'] = 'Username atau Password salah!';
-				    $this->load->view('administrator/login',$data);
+                        // captcha disabled: just show login with error message
+                        $data['image'] = '';
+                        echo $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Username atau Password Salah!!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                        $data['title'] = 'Username atau Password salah!';
+                        $this->load->view('administrator/login',$data);
 			    }
-		    }else{
-                $this->load->helper('captcha');
-                $vals = array(
-                    'img_path'	 => './captcha/',
-                    'img_url'	 => base_url().'captcha/',
-                    'font_path' => FCPATH.'assets/template/admin/Tahoma.ttf',
-                    'font_size'     => 50,
-					'img_width'	 => 340,
-					'img_height' => 50,
-					'border' => 0,
-					'word_length'   => 6,
-					'expiration' => 7200,
-                    'colors'        => array(
-                        'background' => array(255, 255, 255),
-                        'border' => array(255, 255, 255),
-                        'text' => array(0, 0, 0),
-                        'grid' => array(140, 166, 245)
-                    )
-				);
-
-                $cap = create_captcha($vals);
-				$data['image'] = $cap['image'];
-				$this->session->set_userdata('mycaptcha', $cap['word']);
-
-                echo $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Username atau Password Salah!!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-		        $data['title'] = 'username salah atau akun anda sedang diblokir';
-			    $this->load->view('administrator/login',$data);
-		    }
-	    }else{
-            echo $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">Kode keamanan salah!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            redirect($this->uri->segment(1).'/index');
-	    }
+            }else{
+                // This branch is unreachable because we accept POST submissions without captcha check
+                $data['image'] = '';
+                $data['title'] = 'Login';
+                $this->load->view('administrator/login',$data);
+            }
     }else{
             if ($this->session->level!=''){
               redirect($this->uri->segment(1).'/home');
             }else{
                 $this->load->helper('captcha');
-                $vals = array(
-                    'img_path'	 => './captcha/',
-                    'img_url'	 => base_url().'captcha/',
-                    'font_path' => FCPATH.'assets/template/admin/Tahoma.ttf',
-                    'font_size'     => 50,
-					'img_width'	 => 340,
-					'img_height' => 50,
-					'border' => 0,
-					'word_length'   => 6,
-					'expiration' => 7200,
-                    'colors'        => array(
-                'background' => array(255, 255, 255),
-                'border' => array(255, 255, 255),
-                'text' => array(0, 0, 0),
-                'grid' => array(140, 166, 245)
-        )
-				);
-                $cap = create_captcha($vals);
-                $data['image'] = $cap['image'];
-                $this->session->set_userdata('mycaptcha', $cap['word']);
-    			$data['title'] = 'Login';
-    			$this->load->view('administrator/login',$data);
+                // captcha disabled: do not generate captcha image
+                $data['image'] = '';
+                $data['title'] = 'Login';
+                $this->load->view('administrator/login',$data);
 
             }
 		}
